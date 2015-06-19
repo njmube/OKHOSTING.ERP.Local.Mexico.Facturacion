@@ -49,26 +49,26 @@ namespace OKHOSTING.ERP.Local.Mexico.Facturacion.UI.Console
 			var solicitud = Newtonsoft.Json.JsonConvert.DeserializeObject<SolicitudDescarga>(json);
 			//solicitud.Busqueda = Descargador.TipoBusqueda.Recibidas; //testing
 
-			Log.Write("PRocesarDescarga", "---------------------NUEVA SOLICITUD : " + rutaSolicitud, Log.Information);
-			Log.Write("PRocesarDescarga", "RFC: " + solicitud.RFC, Log.Information);
-			Log.Write("PRocesarDescarga", "FechaDesde: " + solicitud.FechaDesde, Log.Information);
-			Log.Write("PRocesarDescarga", "FechaHasta: " + solicitud.FechaHasta, Log.Information);
-			Log.Write("PRocesarDescarga", "Busqueda: " + solicitud.Busqueda, Log.Information);
-			Log.Write("PRocesarDescarga", "Email: " + solicitud.Email, Log.Information);
+			Log.Write("ProcesarDescarga", "---------------------NUEVA SOLICITUD : " + rutaSolicitud, Log.Information);
+			Log.Write("ProcesarDescarga", "RFC: " + solicitud.RFC, Log.Information);
+			Log.Write("ProcesarDescarga", "FechaDesde: " + solicitud.FechaDesde, Log.Information);
+			Log.Write("ProcesarDescarga", "FechaHasta: " + solicitud.FechaHasta, Log.Information);
+			Log.Write("ProcesarDescarga", "Busqueda: " + solicitud.Busqueda, Log.Information);
+			Log.Write("ProcesarDescarga", "Email: " + solicitud.Email, Log.Information);
 
 			string carpeta = Path.Combine(Ruta, "Facturas", Path.GetFileName(rutaSolicitud), solicitud.Busqueda.ToString());
 			
-			Descargador.Descargar(solicitud.RFC, solicitud.Contrasena, carpeta, solicitud.FechaDesde, solicitud.FechaHasta, solicitud.Busqueda);
+			//Descargador.Descargar(solicitud.RFC, solicitud.Contrasena, carpeta, solicitud.FechaDesde, solicitud.FechaHasta, solicitud.Busqueda);
 
 			try
 			{
-				//Descargador.Descargar(solicitud.RFC, solicitud.Contrasena, carpeta, solicitud.FechaDesde, solicitud.FechaHasta, solicitud.Busqueda);
+				Descargador.Descargar(solicitud.RFC, solicitud.Contrasena, carpeta, solicitud.FechaDesde, solicitud.FechaHasta, solicitud.Busqueda);
 			}
 			catch (Exception e)
 			{
 				OKHOSTING.Core.Log.Write("ProcesarDescarga", "Error on " + rutaSolicitud + ": " + e, Log.Information);
 
-				if (e.InnerException.Message.StartsWith("Los datos de acceso son incorrectos"))
+				if (e.InnerException != null &&  e.InnerException.Message.StartsWith("Los datos de acceso son incorrectos"))
 				{
 					//mandar correo
 					mail = new System.Net.Mail.MailMessage();
