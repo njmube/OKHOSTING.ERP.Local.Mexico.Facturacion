@@ -45,12 +45,7 @@ namespace OKHOSTING.ERP.Local.Mexico.Facturacion.UI.Web
 				Directory.CreateDirectory(carpetaSolicitud);
 			}
 
-			string rutaSolicitud = Path.Combine(carpetaSolicitud, txtRFC.Text);
-
-			if (File.Exists(rutaSolicitud))
-			{
-				rutaSolicitud = rutaSolicitud + "-" + new Random().Next();
-			}
+			string rutaSolicitud = Path.Combine(carpetaSolicitud, txtRFC.Text + "-" + new Random().Next());
 
 			File.WriteAllText(rutaSolicitud, json);
 

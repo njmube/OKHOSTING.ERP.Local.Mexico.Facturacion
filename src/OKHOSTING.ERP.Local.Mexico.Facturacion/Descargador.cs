@@ -80,10 +80,21 @@ namespace OKHOSTING.ERP.Local.Mexico.Facturacion
 					browser.TextField("ctl00_MainContent_CldFechaFinal2_Calendario_text").Value = fechaHasta.ToString("dd/MM/yyyy");
 					Thread.Sleep(1000);
 
-					//buscar
-					browser.Button("ctl00_MainContent_BtnBusqueda").Click();
+					//buscar muchas veces por si marca error de lentitud la pagina del sat >(
+					while (true)
+					{
+						browser.Button("ctl00_MainContent_BtnBusqueda").Click();
+						Thread.Sleep(3000);
 
-					Log.Write("Buscando", Log.Information);
+						if (browser.ContainsText("lentitud"))
+						{
+							browser.Link("closeBtn").Click();
+						}
+						else
+						{
+							break;
+						}
+					}
 
 					DescargarFacturasListadas(browser, carpeta);
 				}
@@ -107,7 +118,23 @@ namespace OKHOSTING.ERP.Local.Mexico.Facturacion
 						{
 							//seleccionar dia adecuado
 							//click en buscar por que si no no jala
-							browser.Button("ctl00_MainContent_BtnBusqueda").Click();
+							
+							//buscar muchas veces por si marca error de lentitud la pagina del sat >(
+							while (true)
+							{
+								browser.Button("ctl00_MainContent_BtnBusqueda").Click();
+								Thread.Sleep(3000);
+
+								if (browser.ContainsText("lentitud"))
+								{
+									browser.Link("closeBtn").Click();
+								}
+								else
+								{
+									break;
+								}
+							}
+
 							Thread.Sleep(1000);
 							primeraVez = false;
 						}
@@ -115,10 +142,21 @@ namespace OKHOSTING.ERP.Local.Mexico.Facturacion
 						browser.SelectList("ctl00_MainContent_CldFecha_DdlDia").SelectByValue(mesActual.Day.ToString("00"));
 						Thread.Sleep(1000);
 
-						//buscar
-						browser.Button("ctl00_MainContent_BtnBusqueda").Click();
+						//buscar muchas veces por si marca error de lentitud la pagina del sat >(
+						while (true)
+						{
+							browser.Button("ctl00_MainContent_BtnBusqueda").Click();
+							Thread.Sleep(3000);
 
-						Log.Write("Buscando", Log.Information);
+							if (browser.ContainsText("lentitud"))
+							{
+								browser.Link("closeBtn").Click();
+							}
+							else
+							{
+								break;
+							}
+						}
 
 						DescargarFacturasListadas(browser, carpeta);
 
@@ -135,33 +173,10 @@ namespace OKHOSTING.ERP.Local.Mexico.Facturacion
 
         private static void DescargarFacturasListadas(IE browser, string carpeta)
         {
-			//esperar resultados
-			int intentos = 0;
-
 			//Creating the directory if it doesn't exists
 			if (!System.IO.Directory.Exists(carpeta))
 			{
 				System.IO.Directory.CreateDirectory(carpeta);
-			}
-
-			while (intentos < 20)
-			{
-				Log.Write("Intento " + intentos, Log.Information);
-
-				//ya hay resultados
-				if (browser.Div("ctl00_MainContent_PnlResultados").Style.Display == "inline")
-				{
-					break;
-				}
-				
-				//no hay resultados
-				if (browser.Div("ctl00_MainContent_PnlNoResultados").Style.Display == "inline")
-				{
-					return;
-				}
-
-				intentos++;
-				Thread.Sleep(1000);
 			}
 
 			Log.Write("Descargando", Log.Information);

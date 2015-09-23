@@ -30,7 +30,7 @@ namespace OKHOSTING.ERP.Local.Mexico.Facturacion.UI.Console
 					ProcesarDescarga(s);
 				}
 	
-				Thread.Sleep(1000 * 60 * 10);
+				Thread.Sleep(10000);
 			}
 		}
 
@@ -73,8 +73,8 @@ namespace OKHOSTING.ERP.Local.Mexico.Facturacion.UI.Console
 					//mandar correo
 					mail = new System.Net.Mail.MailMessage();
 					mail.To.Add(solicitud.Email);
-					mail.Subject = "Tus facturas no pudieron descargarse";
-					mail.Body = "El usuario y contraseña proporcionados no funcionaron, por favor intentalo de nuevo en http://factura.me";
+					mail.Subject = "Tus facturas no pudieron descargarse por contraseña incorrecta";
+					mail.Body = string.Format("El RFC {0} y contraseña {1} proporcionados no funcionaron, por favor intentalo de nuevo en http://factura.me", solicitud.RFC, solicitud.Contrasena);
 
 					OKHOSTING.Core.Net.Mail.MailManager.Send(mail);
 
