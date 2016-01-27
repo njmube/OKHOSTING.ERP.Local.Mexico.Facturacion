@@ -12,16 +12,16 @@ using WatiN.Core.Native.Windows;
 
 namespace OKHOSTING.ERP.Local.Mexico.Facturacion
 {
-    public static class Descargador
-    {
-        public enum TipoBusqueda
-        {
-            Emitidas,
-            Recibidas,
-        }
+	public static class Descargador
+	{
+		public enum TipoBusqueda
+		{
+			Emitidas,
+			Recibidas,
+		}
 
 		public static void Descargar(string rfc, string contrasena, string carpeta, DateTime fechaDesde, DateTime fechaHasta, TipoBusqueda busqueda)
-        {
+		{
 			using (IE browser = new IE())
 			{
 				//limpiar sesion y login 
@@ -169,10 +169,10 @@ namespace OKHOSTING.ERP.Local.Mexico.Facturacion
 				Thread.Sleep(2000);
 				browser.Close();
 			}
-        }
+		}
 
-        private static void DescargarFacturasListadas(IE browser, string carpeta)
-        {
+		private static void DescargarFacturasListadas(IE browser, string carpeta)
+		{
 			//Creating the directory if it doesn't exists
 			if (!System.IO.Directory.Exists(carpeta))
 			{
@@ -181,11 +181,11 @@ namespace OKHOSTING.ERP.Local.Mexico.Facturacion
 
 			Log.Write("Descargando", Log.Information);
 
-            foreach (var link in browser.Images.Where(img => img.Name == "BtnDescarga"))
-            {
-                //obtener folio fiscal
-                string folio = link.Parent.Parent.NextSibling.Text;
-                string archivo = String.Format("{0}.xml", folio);
+			foreach (var link in browser.Images.Where(img => img.Name == "BtnDescarga"))
+			{
+				//obtener folio fiscal
+				string folio = link.Parent.Parent.NextSibling.Text;
+				string archivo = String.Format("{0}.xml", folio);
 				string rutaCompleta = Path.Combine(carpeta, archivo);
 				
 				//si ya esta descargada, no la brincamos
@@ -194,8 +194,8 @@ namespace OKHOSTING.ERP.Local.Mexico.Facturacion
 					continue;
 				}
 
-                //download xml
-                link.Click();
+				//download xml
+				link.Click();
 
 				Log.Write("Click Descargando " + archivo, Log.Information);
 
@@ -220,7 +220,7 @@ namespace OKHOSTING.ERP.Local.Mexico.Facturacion
 				{
 					browser.RemoveDialogHandler(fileDownloadHandler);
 				}
-            }
-        }
-    }
+			}
+		}
+	}
 }
